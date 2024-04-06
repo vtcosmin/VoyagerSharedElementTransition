@@ -6,6 +6,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.onClick
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -39,7 +40,7 @@ data class ScreenA(val sharedContent: @Composable () -> Unit) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        Column(modifier = Modifier.width(200.dp)) {
+        Column(modifier = Modifier.width(200.dp), verticalArrangement = Arrangement.Top) {
             Button(onClick = { navigator.push(ScreenB(sharedContent)) }) {
                 Text("Go to Screen B")
             }
@@ -54,7 +55,7 @@ data class ScreenB(val sharedContent: @Composable () -> Unit) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        Column {
+        Column(modifier = Modifier.width(300.dp)) {
             Button(onClick = { navigator.push(ScreenA(sharedContent)) }) {
                 Text("Go to Screen A")
             }
@@ -67,11 +68,11 @@ data class ScreenB(val sharedContent: @Composable () -> Unit) : Screen {
 fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
 
-        val rememberContentWithOrbitalScope = rememberContentWithOrbitalScope {
+        val rememberContentWithOrbitalScope: @Composable() (OrbitalScope.() -> Unit) = rememberContentWithOrbitalScope {
             KamelImage(
                 resource = asyncPainterResource(data = "https://miro.medium.com/v2/resize:fit:1400/1*QjQTzohDz9gznswKpuqUXQ.jpeg"),
                 contentDescription = "",
-                modifier = Modifier.fillMaxWidth().padding(10.dp)
+                modifier = Modifier.padding(10.dp)
                     .animateSharedElementTransition(
                         this,
                         SpringSpec(stiffness = 500f, dampingRatio = Spring.DampingRatioMediumBouncy),
